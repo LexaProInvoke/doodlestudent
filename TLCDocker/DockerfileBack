@@ -1,0 +1,11 @@
+FROM maven:3.9.6-amazoncorretto-21 as builder
+WORKDIR /project
+RUN yum update && yum install git -y
+RUN git clone https://github.com/LexaProInvoke/doodlestudent.git
+WORKDIR /project/doodlestudent/api
+RUN mvn clean package -Dquarkus.package.type=uber-jar
+
+FROM amazoncorretto:21
+WORKDIR /project
+COPY --from=builder /project/doodlestudent/api/target/tlcdemoApp-1.0.0-SNAPSHOT-runner.jar run.jar
+CMD ["sh", "-c", "sleep 30 && java -jar run.jar"]

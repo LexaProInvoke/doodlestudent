@@ -1,0 +1,55 @@
+version: "3.8"
+services:
+  db:
+    image: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=tlc
+      - MYSQL_USER=tlc
+      - MYSQL_PASSWORD=tlc
+  etherpad:
+    image: etherpad/etherpad
+    ports:
+      - "9001:9001"
+    volumes:
+      - ./APIKEY.txt:/opt/etherpad-lite/APIKEY.txt
+  mail:
+    image: bytemark/smtp
+    restart: always
+    ports:
+      - "2525:25"
+  backend:
+    image: oleksiiback:latest
+    build:
+      context: .
+      dockerfile: DockerfileBack
+    container_name: oleksiiback
+    environment:
+      ETHERPAD_HOST: etherpad
+      MESSAGE_DB_HOST: db
+      MAILER_HOST: mail
+    depends_on:
+      - db
+      - etherpad
+      - mail
+    ports:
+      - "8080:8080"
+
+  frontend:
+    image: oleksiifront:latest
+    build:
+      context: .
+      dockerfile: DockerfileFront
+    container_name: oleksiiFront
+    # environment:
+    #   ETHERPAD_HOST: etherpad
+    #   MESSAGE_DB_HOST: db
+    #   MAILER_HOST: mail
+    depends_on:
+      - backend
+    ports:
+      - "4200:4200"
+
+

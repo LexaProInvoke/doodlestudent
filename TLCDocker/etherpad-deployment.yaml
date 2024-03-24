@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: etherpad
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: etherpad
+  template:
+    metadata:
+      labels:
+        app: etherpad
+    spec:
+      containers:
+        - name: etherpad
+          image: etherpad/etherpad
+          ports:
+            - containerPort: 9001
+          volumeMounts:
+            - mountPath: /opt/etherpad-lite/APIKEY.txt
+              name: api-key-volume
+              subPath: APIKEY.txt
+      volumes:
+        - name: api-key-volume
+          configMap:
+            name: etherpad-config
