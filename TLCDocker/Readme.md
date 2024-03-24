@@ -202,11 +202,12 @@ http {
 
 As a result, to deploy a client server application on one computer, there are 5 files in the repository (APIKEY.txt, docker-compose.yaml, DockerfileBack, DockerfileFront, nginx.conf) inside the docker files there are links to repositories with the main code that is downloaded automatically.  
 
-Добавить  схему работы """""""""""""""""""""
+UML deployment diagram 
+
+![Diagram](UmlDiagram.png)
 
 
-
-## Задание 2
+## Objective 2
 
 Now we want to use kubernetes to deploy all the microservices. The goal is to be able to compare and understand the additional abstractions provided by kubernetes compared to simply deploying the application on a single node using docker and docker-compose. In particular, we want to add redundancy to the back-end of the application (redundancy only on this microservice). Especially not on the relational database, as it is more complicated and not quite transparent). So deploy microk8s on your virtual machine.
 Use kubernetes to set up minimal redundancy for the back end of the application (we won't cluster the database initially).
